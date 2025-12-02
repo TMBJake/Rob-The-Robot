@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Robot Modes{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-card">
+        <h2>Robot Mode Control</h2>
+        <p>Switch the car between infrared line-following, ultrasonic obstacle avoidance, or stop.</p>
+
+        <div class="controls">
+            <button id="btn-infrared">Infrared mode</button>
+            <button id="btn-ultrasonic">Ultrasonic mode</button>
+            <button id="btn-stop">Stop robot</button>
+        </div>
+
+        <p id="mode-status" class="status-text">
+            Current mode: (unknown)
+        </p>
+    </div>
+</div>
+
+<script>
+    async function sendMode(url) {
+        try {
+            const resp = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const data = await resp.json();
+            const statusEl = document.getElementById("mode-status");
+
+            if (resp.ok && data.status === "ok") {
+                statusEl.textContent = "Current mode: " + data.mode;
+            } else {
+                statusEl.textContent = "Error: " + (data.error || "could not change mode");
+            }
+        } catch (err) {
+            console.error(err);
+            document.getElementById("mode-status").textContent =
+                "Error: request failed";
+        }
+    }
+
+    document.getElementById("btn-infrared").addEventListener("click", () => {
+        sendMode("/api/infrared/start");
+    });
+
+    document.getElementById("btn-ultrasonic").addEventListener("click", () => {
+        sendMode("/api/ultrasonic/start");
+    });
+
+    document.getElementById("btn-stop").addEventListener("click", () => {
+        sendMode("/api/infrared/stop");
+    });
+</script>
+{% endblock %}

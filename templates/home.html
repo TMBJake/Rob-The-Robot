@@ -1,0 +1,34 @@
+{% extends "base.html" %}  
+{% block title %}Home - IoT Dashboard{% endblock %}  
+  
+{% block content %}  
+<div class="hero">  
+    <h1>Welcome to IoT Data Visualization</h1>  
+    <p>This dashboard displays real-time sensor data from various IoT devices.</p>  
+      
+    <div class="card-grid">  
+        <div class="card">  
+            <h3>About</h3>
+            <p>Information regarding the Rob the Robot project.</p>
+            <a href="{{ url_for('about_2') }}" class="btn">View Chart</a>
+        </div>  
+        <div class="card">
+            <h3>Sensor Data</h3>
+            <p>Charts showing past and current information regarding the data.</p>
+            <a href="{{ url_for('history') }}" class="btn">View Chart</a>
+        </div>
+        <div class="card">  
+            <h3>Directional Controls</h3>
+            <p>Commands used for physically controlling the robot.</p>
+            <a href="{{ url_for('infrared') }}" class="btn">View Chart</a>
+        </div>  
+  
+        <div class="card">  
+            <h3>Automated Command Control</h3>
+            <p>Commands used to start automated functions of the robot.</p>
+            <a href="{{ url_for('movement') }}" class="btn">View Chart</a>
+        </div>
+
+    </div>  
+</div>  
+{% endblock %}  

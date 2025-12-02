@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}About – Smart Robot Car{% endblock %}
+
+{% block content %}
+<div class="section-card">
+    <h2>About the Smart Robot Car</h2>
+    <p>
+        This project is an IoT-enabled smart robot car built for the course
+        <strong>420-N55: IoT – Design and Prototyping of Connected Devices</strong>.
+        The goal is to design a car that can be controlled remotely through
+        a Flask web app and Adafruit IO, and that can also drive itself using
+        infrared line-tracking and ultrasonic obstacle-avoidance modes.
+    </p>
+    <p>
+        The robot sends live sensor data to Adafruit IO and stores historical data
+        in a Neon PostgreSQL database. This allows us to visualize both real-time
+        and historical behaviour of the robot from the dashboard.
+    </p>
+</div>
+
+<div class="section-card">
+    <h2>Hardware & Sensors</h2>
+    <div class="section-grid">
+        <div>
+            <h3>Core Platform</h3>
+            <ul>
+                <li>Raspberry Pi controlling all logic and networking</li>
+                <li>Motor driver + DC motors for movement</li>
+                <li>Servo motor for camera or sensor rotation (depending on setup)</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Sensors</h3>
+            <ul>
+                <li>Infrared line-following sensors</li>
+                <li>Ultrasonic distance sensor for obstacles</li>
+                <li>Voltage / battery monitoring via Adafruit IO</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="section-card">
+    <h2>Software & Data Flow</h2>
+    <p>
+        The Raspberry Pi continuously reads all sensors and sends values to Adafruit IO
+        using MQTT and HTTP. Every reading is saved locally in SQLite, and when internet
+        is available the Pi syncs the local data to a Neon cloud database.
+    </p>
+    <p>This Flask + Chart.js dashboard includes:</p>
+    <ul>
+        <li><strong>Home</strong> – overview and quick access to features</li>
+        <li><strong>About</strong> – project description (this page)</li>
+        <li><strong>Sensor Data</strong> – fetches historical data from the Neon DB</li>
+        <li><strong>Directional Controls</strong> – manual driving using Adafruit IO commands</li>
+        <li><strong>Automated Command Control</strong> – switch between IR tracking, ultrasonic mode, or stop</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h2>Team</h2>
+    <p>This project was developed by:</p>
+    <ul>
+        <li><strong>Jake Tremblay</strong> – ID: 2330184</li>
+        <li><strong>Etienne Khalil</strong> – ID: 2230936</li>
+    </ul>
+</div>
+{% endblock %}

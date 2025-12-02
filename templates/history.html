@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Sensor History{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-card">
+        <h2>Sensor History (Neon)</h2>
+        <p>Explore distance, voltage, and line-following data recorded by the robot.</p>
+
+        <div class="history-filters">
+            <label>
+                Start date:
+                <input type="date" id="start-date">
+            </label>
+            <label>
+                End date:
+                <input type="date" id="end-date">
+            </label>
+            <button onclick="loadHistory()">Load</button>
+        </div>
+
+        <div class="charts-column">
+            <div class="chart-container">
+                <h3>Distance over time (cm)</h3>
+                <canvas id="distanceChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Voltage over time (V)</h3>
+                <canvas id="voltageChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Line side over time (encoded)</h3>
+                <p style="font-size: 0.85rem; color: #7f8c8d;">
+                    Legend (y-values): 0=none, 1=left, 2=middle, 3=right, 4=stop
+                </p>
+                <canvas id="lineSideChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let distanceChart, voltageChart, lineSideChart;
+
+    async function loadHistory() {
+        const start = document.getElementById('start-date').value;
+        const end = document.getElementById('end-date').value;
+
+        if (!start || !end) {
+            alert("Please choose both a start and end date");
+            return;
+        }
+
+        const resp = await fetch(`/api/history?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`);
+        const data = await resp.json();
+
+        if (!resp.ok) {
+            alert(data.error || "Failed to load data");
+            return;
+        }
+
+        const labels = data.labels;
+        const dist = data.distance;
+        const volt = data.voltage;
+        const lineSide = data.line_side_values;
+
+        if (distanceChart) distanceChart.destroy();
+        if (voltageChart) voltageChart.destroy();
+        if (lineSideChart) lineSideChart.destroy();
+
+        const ctxDist = document.getElementById('distanceChart').getContext('2d');
+        distanceChart = new Chart(ctxDist, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Distance (cm)',
+                    data: dist
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        const ctxVolt = document.getElementById('voltageChart').getContext('2d');
+        voltageChart = new Chart(ctxVolt, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Voltage (V)',
+                    data: volt
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        const ctxLineSide = document.getElementById('lineSideChart').getContext('2d');
+        lineSideChart = new Chart(ctxLineSide, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Line side (encoded)',
+                    data: lineSide,
+                    stepped: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
+        });
+    }
+
+    // Default to yesterday → today
+    window.addEventListener('load', () => {
+        const today = new Date();
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+
+        const fmt = d => d.toISOString().slice(0, 10);
+
+        document.getElementById('start-date').value = fmt(yesterday);
+        document.getElementById('end-date').value = fmt(today);
+    });
+</script>
+{% endblock %}

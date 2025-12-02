@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Robot Movement & Controls{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Robot Movement & Controls</h2>
+
+    <div class="movement-grid">
+
+        <!-- Driving -->
+        <section class="section-card">
+            <h2>Driving</h2>
+            <p>Use the D-pad to drive the car manually.</p>
+
+            <div class="drive-grid">
+                <div class="drive-grid-row">
+                    <button id="btn-forward" class="uniform-btn">Forward</button>
+                </div>
+                <div class="drive-grid-row">
+                    <button id="btn-left" class="uniform-btn">Left</button>
+                    <button id="btn-stop-drive" class="uniform-btn">Stop</button>
+                    <button id="btn-right" class="uniform-btn">Right</button>
+                </div>
+                <div class="drive-grid-row">
+                    <button id="btn-backward" class="uniform-btn">Backward</button>
+                </div>
+            </div>
+
+            <p id="drive-status" class="status-text">Driving: stopped</p>
+        </section>
+
+        <!-- Buzzer -->
+        <section class="section-card">
+            <h2>Buzzer</h2>
+            <p>Toggle the buzzer on or off.</p>
+
+            <div class="controls-row">
+                <button id="btn-buzzer">Turn Buzzer ON</button>
+            </div>
+            <p id="buzzer-status" class="status-text">Buzzer state: unknown</p>
+        </section>
+
+        <!-- Camera Servo -->
+        <section class="section-card">
+            <h2>Camera Servo</h2>
+            <p>Adjust the camera position using the servo controls.</p>
+
+            <div class="camera-grid">
+                <div class="camera-grid-row">
+                    <button id="btn-cam-up" class="uniform-btn">Up</button>
+                </div>
+                <div class="camera-grid-row">
+                    <button id="btn-cam-left" class="uniform-btn">Left</button>
+                    <button id="btn-cam-center" class="uniform-btn">Center</button>
+                    <button id="btn-cam-right" class="uniform-btn">Right</button>
+                </div>
+                <div class="camera-grid-row">
+                    <button id="btn-cam-down" class="uniform-btn">Down</button>
+                </div>
+            </div>
+
+            <p id="camera-status" class="status-text">Camera status: idle</p>
+        </section>
+
+    </div>
+
+    <div class="status-bar" id="movement-status">
+        Status: ready
+    </div>
+</div>
+
+<script>
+// ---------- Helper for POST requests ----------
+async function postCommand(url) {
+    const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    const data = await resp.json();
+    if (!resp.ok || data.status !== "ok") {
+        throw new Error(data.error || "Request failed");
+    }
+    return data;
+}
+
+// ---------- Driving ----------
+const movementStatus = document.getElementById("movement-status");
+const driveStatus = document.getElementById("drive-status");
+
+function prettyDirection(command) {
+    if (command === "stop") return "stopped";
+    // you can customize labels here if you want
+    return command;
+}
+
+function wireDriveButton(id, url, labelIfError) {
+    document.getElementById(id).addEventListener("click", async () => {
+        try {
+            const data = await postCommand(url);
+            movementStatus.textContent = "Status: sent command '" + data.command + "'";
+            driveStatus.textContent = "Driving: " + prettyDirection(data.command);
+        } catch (err) {
+            console.error(err);
+            movementStatus.textContent = "Status: error sending " + labelIfError;
+        }
+    });
+}
+
+wireDriveButton("btn-forward", "/api/move/forward", "forward");
+wireDriveButton("btn-backward", "/api/move/backward", "backward");
+wireDriveButton("btn-left", "/api/move/left", "left");
+wireDriveButton("btn-right", "/api/move/right", "right");
+wireDriveButton("btn-stop-drive", "/api/move/stop", "stop");
+
+// ---------- Buzzer ----------
+let buzzerOn = false;
+const buzzerBtn = document.getElementById("btn-buzzer");
+const buzzerStatus = document.getElementById("buzzer-status");
+
+buzzerBtn.addEventListener("click", async () => {
+    try {
+        const data = await postCommand("/api/buzzer/toggle");
+        buzzerOn = !buzzerOn;
+        buzzerBtn.textContent = buzzerOn ? "Turn Buzzer OFF" : "Turn Buzzer ON";
+        buzzerStatus.textContent = "Buzzer state: " + (buzzerOn ? "ON" : "OFF");
+        movementStatus.textContent = "Status: buzzer-toggle sent";
+    } catch (err) {
+        console.error(err);
+        movementStatus.textContent = "Status: error toggling buzzer";
+    }
+});
+
+// ---------- Camera servo ----------
+const cameraStatus = document.getElementById("camera-status");
+
+function wireCameraButton(id, direction) {
+    document.getElementById(id).addEventListener("click", async () => {
+        try {
+            const data = await postCommand("/api/camera/" + direction);
+            cameraStatus.textContent = "Camera status: " + data.command;
+            movementStatus.textContent = "Status: camera command '" + data.command + "' sent";
+        } catch (err) {
+            console.error(err);
+            movementStatus.textContent = "Status: error sending camera command (" + direction + ")";
+        }
+    });
+}
+
+wireCameraButton("btn-cam-up", "up");
+wireCameraButton("btn-cam-down", "down");
+wireCameraButton("btn-cam-left", "left");
+wireCameraButton("btn-cam-right", "right");
+wireCameraButton("btn-cam-center", "center");
+</script>
+{% endblock %}
