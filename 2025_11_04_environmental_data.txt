@@ -1,0 +1,8 @@
+{"timestamp": "2025-11-04T14:06:02.710189", "distance": 300.0, "line_side": "stop", "voltage": 7.11}
+{"timestamp": "2025-11-04T16:47:25.092550", "distance": 76.7, "line_side": "none", "voltage": 6.9}
+{"timestamp": "2025-11-04T16:47:35.204356", "distance": 55.1, "line_side": "none", "voltage": 6.9}
+{"timestamp": "2025-11-04T16:47:45.347147", "distance": 82.8, "line_side": "none", "voltage": 6.96}
+{"timestamp": "2025-11-04T16:47:55.495374", "distance": 82.4, "line_side": "none", "voltage": 6.87}
+{"timestamp": "2025-11-04T16:48:05.596226", "distance": 81.9, "line_side": "none", "voltage": 6.9}
+{"timestamp": "2025-11-04T16:48:15.688178", "distance": 48.8, "line_side": "none", "voltage": 6.9}
+{"timestamp": "2025-11-04T16:48:25.826588", "distance": 83.5, "line_side": "none", "voltage": 6.87}

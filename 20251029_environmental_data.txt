@@ -1,0 +1,12 @@
+null
+null
+null
+null
+{"timestamp": "2025-10-29T22:58:45.710657", "distance": 89.7, "line_side": "left"}
+{"timestamp": "2025-10-29T22:59:28.340058", "distance": 89.4, "line_side": "left"}
+{"timestamp": "2025-10-29T23:00:30.309636", "distance": 69.2, "line_side": "left"}
+{"timestamp": "2025-10-29T23:02:00.315378", "distance": 69.0, "line_side": "none"}
+{"timestamp": "2025-10-29T23:03:30.321127", "distance": 69.0, "line_side": "none"}
+{"timestamp": "2025-10-29T23:04:56.900815", "distance": 68.9, "line_side": "stop"}
+{"timestamp": "2025-10-29T23:06:26.961434", "distance": 72.2, "line_side": "left"}
+{"timestamp": "2025-10-29T23:07:56.968314", "distance": 72.6, "line_side": "left"}

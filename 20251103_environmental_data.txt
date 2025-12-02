@@ -1,0 +1,3 @@
+{"timestamp": "2025-11-03T17:37:54.797031", "distance": 40.1, "line_side": "none", "voltage": 7.23}
+{"timestamp": "2025-11-03T17:39:57.246273", "distance": 43.2, "line_side": "stop", "voltage": 7.23}
+{"timestamp": "2025-11-03T17:41:26.034491", "distance": 46.1, "line_side": "stop", "voltage": 7.23}

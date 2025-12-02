@@ -1,0 +1,8 @@
+{"timestamp": "2025-11-04T13:57:19.588933", "distance": 72.7, "line_side": "stop", "voltage": 6.9}
+null
+null
+{"timestamp": "2025-11-04T14:00:19.930910", "distance": 66.3, "line_side": "stop", "voltage": 7.14}
+{"timestamp": "2025-11-04T14:00:30.044722", "distance": 263.9, "line_side": "middle", "voltage": 7.17}
+{"timestamp": "2025-11-04T14:04:22.751095", "distance": 21.6, "line_side": "left", "voltage": 7.17}
+{"timestamp": "2025-11-04T14:04:32.882441", "distance": 9.8, "line_side": "middle", "voltage": 7.14}
+null

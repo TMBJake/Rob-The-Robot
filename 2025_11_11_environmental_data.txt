@@ -1,0 +1,1 @@
+{"timestamp": "2025-11-11T12:49:43.103190", "distance": 157.7, "line_side": "stop", "voltage": 6.69}
